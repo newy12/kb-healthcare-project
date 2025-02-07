@@ -1,5 +1,14 @@
 # kb 헬스케어 사전 과제 테스트
-
+## 환경구축 (docker, mysql)
+```
+docker run --name mysql-container \
+-e MYSQL_ROOT_PASSWORD=root \
+-e MYSQL_DATABASE=kb \
+-d -p 3306:3306 mysql:latest
+```
+```
+docker run --name redis-container -p 6379:6379 -d redis
+```
 ---
 
 ## 요구사항
