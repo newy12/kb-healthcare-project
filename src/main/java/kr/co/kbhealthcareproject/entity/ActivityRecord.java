@@ -56,7 +56,7 @@ public class ActivityRecord {
     @Comment(value = "최종 업데이트 일시")
     private ZonedDateTime lastUpdate;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = false, length = 50)
     @Comment(value = "활동 타입")
     private String type;
 

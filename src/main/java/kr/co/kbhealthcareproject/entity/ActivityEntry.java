@@ -38,12 +38,14 @@ public class ActivityEntry {
     private double distanceValue;
 
     @Comment(value = "활동 거리 단위")
+    @Column(length = 50)
     private String distanceUnit;
 
     @Comment(value = "칼로리")
     private double caloriesValue;
 
     @Comment(value = "칼로리 단위")
+    @Column(length = 50)
     private String caloriesUnit;
 
     @Comment(value = "걸음 수")
