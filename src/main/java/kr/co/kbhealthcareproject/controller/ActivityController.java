@@ -2,6 +2,7 @@ package kr.co.kbhealthcareproject.controller;
 
 import kr.co.kbhealthcareproject.dto.request.ActivityRequestDto;
 import kr.co.kbhealthcareproject.dto.response.DailyActivityResponseDto;
+import kr.co.kbhealthcareproject.dto.response.MonthlyActivityResponseDto;
 import kr.co.kbhealthcareproject.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,15 @@ public class ActivityController {
     @GetMapping("/daily")
     public ResponseEntity<List<DailyActivityResponseDto>> getDailyActivityData(@RequestParam String recordKey) {
         return ResponseEntity.ok(activityService.getDailyActivityData(recordKey));
+    }
+
+    /**
+     * 월별 Activity 데이터 조회
+     * @param recordKey
+     * @return
+     */
+    @GetMapping("/monthly")
+    public ResponseEntity<List<MonthlyActivityResponseDto>> getMonthlyActivityData(@RequestParam String recordKey) {
+        return ResponseEntity.ok(activityService.getMonthlyActivityData(recordKey));
     }
 }

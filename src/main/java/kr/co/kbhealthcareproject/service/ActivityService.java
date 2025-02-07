@@ -2,6 +2,7 @@ package kr.co.kbhealthcareproject.service;
 
 import kr.co.kbhealthcareproject.dto.request.ActivityRequestDto;
 import kr.co.kbhealthcareproject.dto.response.DailyActivityResponseDto;
+import kr.co.kbhealthcareproject.dto.response.MonthlyActivityResponseDto;
 import kr.co.kbhealthcareproject.entity.ActivityEntry;
 import kr.co.kbhealthcareproject.entity.ActivityRecord;
 import kr.co.kbhealthcareproject.entity.enums.OsType;
@@ -10,13 +11,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -108,6 +107,7 @@ public class ActivityService {
                 .flatMap(record -> record.getEntries().stream())
                 .collect(Collectors.groupingBy(entry -> entry.getPeriodFrom().toLocalDate()))
                 .entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
                 .map(entry -> {
                     LocalDate activityDate = entry.getKey();
                     List<ActivityEntry> entriesForDate = entry.getValue();
@@ -127,6 +127,49 @@ public class ActivityService {
 
                     return new DailyActivityResponseDto(
                             activityDate,   // 날짜
+                            totalSteps,     // 총 Steps
+                            (int) totalCalories, // 총 Calories
+                            totalDistance,  // 총 Distance
+                            recordKey       // RecordKey
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<MonthlyActivityResponseDto> getMonthlyActivityData(String recordKey) {
+
+        // recordKey에 해당하는 ActivityRecord 데이터를 조회
+        List<ActivityRecord> records = recordRepository.findByRecordKey(recordKey);
+
+        // ActivityRecord에서 각 ActivityEntry를 월별로 그룹화하여 응답
+        return records.stream()
+                .flatMap(record -> record.getEntries().stream())
+                .collect(Collectors.groupingBy(entry -> YearMonth.from(entry.getPeriodFrom())))
+                .entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> {
+                    YearMonth month = entry.getKey();
+                    List<ActivityEntry> monthlyEntries = entry.getValue();
+
+                    // 해당 월의 총 Steps 계산 (double 값이 있을 경우 int로 변환)
+                    int totalSteps = monthlyEntries.stream()
+                            .mapToInt(entryInfo -> (int) entryInfo.getSteps())
+                            .sum();
+
+                    // 해당 월의 총 Calories 계산
+                    double totalCalories = monthlyEntries.stream()
+                            .mapToDouble(ActivityEntry::getCaloriesValue)
+                            .sum();
+
+                    // 해당 월의 총 Distance 계산
+                    double totalDistance = monthlyEntries.stream()
+                            .mapToDouble(ActivityEntry::getDistanceValue)
+                            .sum();
+
+                    // 계산된 월별 데이터와 recordKey를 사용하여 MonthlyActivityResponseDto 객체 생성
+                    return new MonthlyActivityResponseDto(
+                            month.toString(),   // 날짜
                             totalSteps,     // 총 Steps
                             (int) totalCalories, // 총 Calories
                             totalDistance,  // 총 Distance
