@@ -24,7 +24,7 @@ public class Source {
     @Comment(value = "제품명")
     private String productName;
     @Comment(value = "제조사")
-    private String vendor;
+    private String vender;
     @Comment(value = "타입")
     private String type;
     @Comment(value = "모드")

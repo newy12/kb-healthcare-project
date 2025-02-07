@@ -33,7 +33,7 @@ public class ActivityRecord {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "os_type", nullable = false)
-    @Comment(value = "운영체제")
+    @Comment(value = "OS 타입")
     private OsType osType;
 
     @Comment(value = "메모")
@@ -58,7 +58,7 @@ public class ActivityRecord {
 
     @Column(name = "type", nullable = false)
     @Comment(value = "활동 타입")
-    private String type;  // 활동 타입 추가
+    private String type;
 
     public void setEntries(List<ActivityEntry> entries) {
         if (this.entries == null) {
