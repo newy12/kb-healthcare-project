@@ -8,6 +8,9 @@ import kr.co.kbhealthcareproject.entity.ActivityRecord;
 import kr.co.kbhealthcareproject.entity.enums.OsType;
 import kr.co.kbhealthcareproject.repository.ActivityRecordRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,10 @@ public class ActivityService {
 
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value="dailyActivityData", allEntries = true, cacheManager = "cacheManager"),
+            @CacheEvict(value="monthlyActivityData", allEntries = true, cacheManager = "cacheManager")
+    })
     public void saveActivityData(ActivityRequestDto request) {
 
         //운영체제 구별
@@ -98,6 +105,7 @@ public class ActivityService {
 
     // 일별 데이터 조회
     @Transactional(readOnly = true)
+    @Cacheable(value = "dailyActivityData", key = "#recordKey", unless = "#result == null || #result.isEmpty()")
     public List<DailyActivityResponseDto> getDailyActivityData(String recordKey) {
         // 특정 recordKey에 맞는 ActivityRecord 조회
         List<ActivityRecord> records = recordRepository.findByRecordKey(recordKey);
@@ -137,6 +145,7 @@ public class ActivityService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "monthlyActivityData", key = "#recordKey", unless = "#result == null || #result.isEmpty()")
     public List<MonthlyActivityResponseDto> getMonthlyActivityData(String recordKey) {
 
         // recordKey에 해당하는 ActivityRecord 데이터를 조회

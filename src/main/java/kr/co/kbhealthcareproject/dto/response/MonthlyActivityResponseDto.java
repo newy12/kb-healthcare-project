@@ -3,8 +3,10 @@ package kr.co.kbhealthcareproject.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class MonthlyActivityResponseDto {
+public class MonthlyActivityResponseDto implements Serializable {
     @JsonProperty(value = "Monthly")
     private String monthly;
     @JsonProperty(value = "Steps")

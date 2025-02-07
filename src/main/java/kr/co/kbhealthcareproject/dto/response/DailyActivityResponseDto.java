@@ -1,12 +1,14 @@
 package kr.co.kbhealthcareproject.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-public class DailyActivityResponseDto {
+public class DailyActivityResponseDto implements Serializable {
     @JsonProperty(value = "Daily")
     private LocalDate daily;
     @JsonProperty(value = "Steps")
