@@ -19,7 +19,7 @@
 ---
 ## 제품 산출물
 1. 데이터베이스 설계 ERD
-<img width="948" alt="Image" src="https://github.com/user-attachments/assets/2a306536-3e32-4e55-841c-b58d90ad039d" />
+<img width="931" alt="Image" src="https://github.com/user-attachments/assets/b7d046cf-fb19-46e0-a418-9a76a09f26d6" />
 
 
 # source 
