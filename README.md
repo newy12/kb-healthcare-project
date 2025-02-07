@@ -37,7 +37,6 @@
 
 
 2. 데이터 조회 결과 제출 (Daily/Monthly 레코드키 기준)
-(   
 
 # Daily (recordkey = 3b87c9a4-f983-4168-8f27-85436447bb57)
 ```json
