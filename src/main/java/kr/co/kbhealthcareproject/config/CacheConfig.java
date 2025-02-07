@@ -34,7 +34,7 @@ public class CacheConfig {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
                         new GenericJackson2JsonRedisSerializer(objectMapper)
                 ))
-                .entryTtl(Duration.ofMinutes(1)); // 캐시 만료 시간 5분
+                .entryTtl(Duration.ofMinutes(5)); // 캐시 만료 시간 5분
     }
 
     @Bean
