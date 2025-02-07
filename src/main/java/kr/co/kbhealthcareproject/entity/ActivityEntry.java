@@ -20,7 +20,7 @@ public class ActivityEntry {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "varchar(38)")
     @Comment(value = "활동엔트리 키값")
-    private String id;
+    private String activity_entry_id;
 
     @ManyToOne
     @JoinColumn(name = "record_id", nullable = false)

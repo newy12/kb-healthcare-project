@@ -4,12 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Data
 public class DailyActivityResponseDto implements Serializable {
     @JsonProperty(value = "Daily")
-    private LocalDate daily;
+    private String daily;
     @JsonProperty(value = "Steps")
     private int totalSteps;
     @JsonProperty(value = "calories")
@@ -19,7 +18,7 @@ public class DailyActivityResponseDto implements Serializable {
     @JsonProperty(value = "recordkey")
     private String recordKey;
 
-    public DailyActivityResponseDto(LocalDate daily, int totalSteps, int totalCalories, double totalDistance, String recordKey) {
+    public DailyActivityResponseDto(String daily, int totalSteps, int totalCalories, double totalDistance, String recordKey) {
         this.daily = daily;
         this.totalSteps = totalSteps;
         this.totalCalories = totalCalories;

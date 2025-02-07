@@ -116,14 +116,6 @@ public class ActivityService {
         }
     }
 
-    private boolean isIso8601Date(String dateStr) {
-        try {
-            OffsetDateTime.parse(dateStr, ISO_WITHOUT_Z_FORMATTER);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
 
     // 일별 데이터 조회
     @Transactional(readOnly = true)
@@ -131,6 +123,9 @@ public class ActivityService {
     public List<DailyActivityResponseDto> getDailyActivityData(String recordKey) {
         // 특정 recordKey에 맞는 ActivityRecord 조회
         List<ActivityRecord> records = recordRepository.findByRecordKey(recordKey);
+
+        // 날짜 포맷 정의 (2024-11.15 형식)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM.dd");
 
         // 조회된 ActivityRecord에서 각 ActivityEntry를 날짜별로 그룹화하여 응답
         return records.stream()
@@ -156,7 +151,7 @@ public class ActivityService {
                             .sum();
 
                     return new DailyActivityResponseDto(
-                            activityDate,   // 날짜
+                            activityDate.format(formatter),   // 날짜
                             totalSteps,     // 총 Steps
                             (int) totalCalories, // 총 Calories
                             totalDistance,  // 총 Distance

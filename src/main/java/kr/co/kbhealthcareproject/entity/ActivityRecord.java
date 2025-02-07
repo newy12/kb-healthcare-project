@@ -25,7 +25,7 @@ public class ActivityRecord {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "varchar(38)")
     @Comment(value = "활동레코드 키값")
-    private String id;
+    private String activity_record_id;
 
     @Column(name = "record_key", nullable = false, unique = true)
     @Comment(value = "레코드키")

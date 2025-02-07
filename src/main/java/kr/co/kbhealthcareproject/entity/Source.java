@@ -19,7 +19,7 @@ public class Source {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "varchar(38)")
     @Comment(value = "소스 키값")
-    private String id;
+    private String source_id;
 
     @Comment(value = "제품명")
     private String productName;
