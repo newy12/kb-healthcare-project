@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class ActivityRecord {
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "varchar(38)")
+    @Comment(value = "활동레코드 키값")
     private String id;
 
     @Column(name = "record_key", nullable = false, unique = true)
@@ -37,6 +39,11 @@ public class ActivityRecord {
     @Comment(value = "메모")
     private String memo;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "source_id")
+    private Source source;
+
+
     @OneToMany(mappedBy = "activityRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityEntry> entries;
 
@@ -45,6 +52,14 @@ public class ActivityRecord {
     @Column(nullable = false, columnDefinition = "TIMESTAMP(0)")
     private LocalDateTime regDate;
 
+    @Column(name = "last_update", nullable = false, columnDefinition = "TIMESTAMP(0)")
+    @Comment(value = "최종 업데이트 일시")
+    private ZonedDateTime lastUpdate;
+
+    @Column(name = "type", nullable = false)
+    @Comment(value = "활동 타입")
+    private String type;  // 활동 타입 추가
+
     public void setEntries(List<ActivityEntry> entries) {
         if (this.entries == null) {
             this.entries = new ArrayList<>();
@@ -52,4 +67,6 @@ public class ActivityRecord {
         this.entries.clear();
         this.entries.addAll(entries);
     }
+
+
 }

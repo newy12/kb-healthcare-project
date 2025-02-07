@@ -26,19 +26,26 @@ public class ActivityEntry {
     @JoinColumn(name = "record_id", nullable = false)
     private ActivityRecord activityRecord;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP(0)")
-    private LocalDateTime periodFrom;
-
+    @Comment(value = "활동 시작")
     @Column(nullable = false, columnDefinition = "TIMESTAMP(0)")
     private LocalDateTime periodTo;
 
+    @Comment(value = "활동 끝")
+    @Column(nullable = false, columnDefinition = "TIMESTAMP(0)")
+    private LocalDateTime periodFrom;
+
+    @Comment(value = "활동 거리")
     private double distanceValue;
 
+    @Comment(value = "활동 거리 단위")
     private String distanceUnit;
 
+    @Comment(value = "칼로리")
     private double caloriesValue;
 
+    @Comment(value = "칼로리 단위")
     private String caloriesUnit;
 
+    @Comment(value = "걸음 수")
     private double steps;
 }

@@ -5,8 +5,10 @@ import kr.co.kbhealthcareproject.dto.response.DailyActivityResponseDto;
 import kr.co.kbhealthcareproject.dto.response.MonthlyActivityResponseDto;
 import kr.co.kbhealthcareproject.entity.ActivityEntry;
 import kr.co.kbhealthcareproject.entity.ActivityRecord;
+import kr.co.kbhealthcareproject.entity.Source;
 import kr.co.kbhealthcareproject.entity.enums.OsType;
 import kr.co.kbhealthcareproject.repository.ActivityRecordRepository;
+import kr.co.kbhealthcareproject.repository.SourceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 public class ActivityService {
 
     private final ActivityRecordRepository recordRepository;
+    private final SourceRepository sourceRepository;
 
     // ISO 8601 포맷 문자열을 처리하기 위한 데이터포맷
     private static final DateTimeFormatter ISO_WITHOUT_Z_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -42,11 +45,26 @@ public class ActivityService {
         //운영체제 구별
         OsType osType = determineOsType(request);
 
+        // Source 객체 생성 및 설정
+        Source source = Source.builder()
+                .productName(request.getData().getSource().getProduct().getName())
+                .vendor(request.getData().getSource().getProduct().getVender())
+                .type(request.getData().getSource().getType())
+                .mode(request.getData().getSource().getMode())
+                .name(request.getData().getSource().getName())
+                .build();
+
+        // Source 저장
+        sourceRepository.save(source);
+
         //활동기록 객체 생성
         ActivityRecord record = ActivityRecord.builder()
                 .recordKey(request.getRecordkey())
                 .osType(osType)
                 .memo(request.getData().getMemo())
+                .source(source)
+                .lastUpdate(request.getLastUpdate())
+                .type(request.getType())
                 .build();
 
         //활동기록 객체에 활동기록 엔티티 추가
@@ -71,12 +89,16 @@ public class ActivityService {
 
 
     private OsType determineOsType(ActivityRequestDto request) {
-        String periodFrom = request.getData().getEntries().get(0).getPeriod().getFrom();
+        // product name을 가져와서 비교
+        String productName = request.getData().getSource().getProduct().getName();
 
-        if (isIso8601Date(periodFrom)) {
+        if ("iPhone".equalsIgnoreCase(productName)) {
             return OsType.IOS;
-        } else {
+        } else if ("Android".equalsIgnoreCase(productName)) {
             return OsType.AOS;
+        } else {
+            // 예외 처리나 기본값 처리
+            throw new IllegalArgumentException("Unknown product name: " + productName);
         }
     }
 
