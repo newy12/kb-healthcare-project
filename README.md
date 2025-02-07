@@ -19,7 +19,7 @@
 ---
 ## 제품 산출물
 1. 데이터베이스 설계 ERD
-<img width="882" alt="Image" src="https://github.com/user-attachments/assets/457e61d3-c414-4769-afdf-6a1c8620b3a0" />
+<img width="948" alt="Image" src="https://github.com/user-attachments/assets/2a306536-3e32-4e55-841c-b58d90ad039d" />
 
 
 # source 
@@ -37,7 +37,6 @@
 
 
 2. 데이터 조회 결과 제출 (Daily/Monthly 레코드키 기준)
-(   
 
 # Daily (recordkey = 3b87c9a4-f983-4168-8f27-85436447bb57)
 ```json
