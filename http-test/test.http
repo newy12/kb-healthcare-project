@@ -7,3 +7,5 @@ Content-Type: application/json
 }
 
 
+### daily select test
+GET http://localhost:8080/api/v1/activity/daily?recordKey=7b012e6e-ba2b-49c7-bc2e-473b7b58e72e

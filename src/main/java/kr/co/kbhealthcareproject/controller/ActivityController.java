@@ -1,13 +1,13 @@
 package kr.co.kbhealthcareproject.controller;
 
-import kr.co.kbhealthcareproject.dto.ActivityRequestDto;
+import kr.co.kbhealthcareproject.dto.request.ActivityRequestDto;
+import kr.co.kbhealthcareproject.dto.response.DailyActivityResponseDto;
 import kr.co.kbhealthcareproject.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/activity")
@@ -24,5 +24,15 @@ public class ActivityController {
     public ResponseEntity<?> saveActivity(@RequestBody ActivityRequestDto request) {
         activityService.saveActivityData(request);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 일별 Activity 데이터 조회
+     * @param recordKey
+     * @return
+     */
+    @GetMapping("/daily")
+    public ResponseEntity<List<DailyActivityResponseDto>> getDailyActivityData(@RequestParam String recordKey) {
+        return ResponseEntity.ok(activityService.getDailyActivityData(recordKey));
     }
 }

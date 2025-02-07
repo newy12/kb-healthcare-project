@@ -1,4 +1,4 @@
-package kr.co.kbhealthcareproject.dto;
+package kr.co.kbhealthcareproject.dto.request;
 
 import lombok.Data;
 

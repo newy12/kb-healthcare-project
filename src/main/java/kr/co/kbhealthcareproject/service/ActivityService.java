@@ -1,6 +1,7 @@
 package kr.co.kbhealthcareproject.service;
 
-import kr.co.kbhealthcareproject.dto.ActivityRequestDto;
+import kr.co.kbhealthcareproject.dto.request.ActivityRequestDto;
+import kr.co.kbhealthcareproject.dto.response.DailyActivityResponseDto;
 import kr.co.kbhealthcareproject.entity.ActivityEntry;
 import kr.co.kbhealthcareproject.entity.ActivityRecord;
 import kr.co.kbhealthcareproject.entity.enums.OsType;
@@ -9,12 +10,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -92,5 +95,44 @@ public class ActivityService {
         } catch (DateTimeParseException e) {
             return false;
         }
+    }
+
+    // 일별 데이터 조회
+    @Transactional(readOnly = true)
+    public List<DailyActivityResponseDto> getDailyActivityData(String recordKey) {
+        // 특정 recordKey에 맞는 ActivityRecord 조회
+        List<ActivityRecord> records = recordRepository.findByRecordKey(recordKey);
+
+        // 조회된 ActivityRecord에서 각 ActivityEntry를 날짜별로 그룹화하여 응답
+        return records.stream()
+                .flatMap(record -> record.getEntries().stream())
+                .collect(Collectors.groupingBy(entry -> entry.getPeriodFrom().toLocalDate()))
+                .entrySet().stream()
+                .map(entry -> {
+                    LocalDate activityDate = entry.getKey();
+                    List<ActivityEntry> entriesForDate = entry.getValue();
+
+                    // 해당 날짜에 대한 Steps, Calories, Distance 합산
+                    int totalSteps = entriesForDate.stream()
+                            .mapToInt(entryForDate -> (int) entryForDate.getSteps())
+                            .sum();
+
+                    double totalCalories = entriesForDate.stream()
+                            .mapToDouble(ActivityEntry::getCaloriesValue)
+                            .sum();
+
+                    double totalDistance = entriesForDate.stream()
+                            .mapToDouble(ActivityEntry::getDistanceValue)
+                            .sum();
+
+                    return new DailyActivityResponseDto(
+                            activityDate,   // 날짜
+                            totalSteps,     // 총 Steps
+                            (int) totalCalories, // 총 Calories
+                            totalDistance,  // 총 Distance
+                            recordKey       // RecordKey
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }
