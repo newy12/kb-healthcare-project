@@ -2,6 +2,8 @@ package kr.co.kbhealthcareproject.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 
@@ -10,12 +12,15 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "activity_entry")
+@Table(schema = "kb", name = "activity_entry")
 public class ActivityEntry {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "varchar(38)")
+    @Comment(value = "활동엔트리 키값")
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "record_id", nullable = false)
