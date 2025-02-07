@@ -1,5 +1,5 @@
 # kb 헬스케어 사전 과제 테스트
-## 환경구축 (docker, mysql)
+## 환경구축 (mysql, redis)
 ```
 docker run --name mysql-container \
 -e MYSQL_ROOT_PASSWORD=root \
