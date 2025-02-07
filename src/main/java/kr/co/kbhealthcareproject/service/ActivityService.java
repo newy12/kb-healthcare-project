@@ -48,7 +48,7 @@ public class ActivityService {
         // Source 객체 생성 및 설정
         Source source = Source.builder()
                 .productName(request.getData().getSource().getProduct().getName())
-                .vendor(request.getData().getSource().getProduct().getVender())
+                .vender(request.getData().getSource().getProduct().getVender())
                 .type(request.getData().getSource().getType())
                 .mode(request.getData().getSource().getMode())
                 .name(request.getData().getSource().getName())
