@@ -40,6 +40,7 @@ docker run --name redis-container -p 6379:6379 -d redis
 # activity_entry 
 
 활동의 세부 항목들을 저장하는 테이블로, 각 활동 항목은 activity_record 테이블의 id와 연결됩니다. 각 엔트리는 칼로리, 거리, 걸음 수 등을 저장하며, 활동 시작과 종료 시간을 기록합니다.
+
 ---
 
 
