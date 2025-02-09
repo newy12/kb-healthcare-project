@@ -4,7 +4,7 @@
 docker run --name mysql-container \
 -e MYSQL_ROOT_PASSWORD=root \
 -e MYSQL_DATABASE=kb \
--d -p 3306:3306 mysql:latest
+-d -p 3306:3306 mysql:8.0
 ```
 ```
 docker run --name redis-container -p 6379:6379 -d redis
