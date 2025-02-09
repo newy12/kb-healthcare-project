@@ -22,7 +22,7 @@ docker run --name redis-container -p 6379:6379 -d redis
 - Java 17
 - Spring boot 3.4.2
 - Spring Data JPA
-- Mysql
+- Mysql 8.0
 - Redis
 
 ---
