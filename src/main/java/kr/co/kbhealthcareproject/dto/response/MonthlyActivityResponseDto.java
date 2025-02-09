@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 public class MonthlyActivityResponseDto implements Serializable {
@@ -14,11 +15,11 @@ public class MonthlyActivityResponseDto implements Serializable {
     @JsonProperty(value = "calories")
     private int totalCalories;
     @JsonProperty(value = "distance")
-    private double totalDistance;
+    private BigDecimal totalDistance;
     @JsonProperty(value = "recordkey")
     private String recordKey;
 
-    public MonthlyActivityResponseDto(String monthly, int totalSteps, int totalCalories, double totalDistance, String recordKey) {
+    public MonthlyActivityResponseDto(String monthly, int totalSteps, int totalCalories, BigDecimal totalDistance, String recordKey) {
         this.monthly = monthly;
         this.totalSteps = totalSteps;
         this.totalCalories = totalCalories;

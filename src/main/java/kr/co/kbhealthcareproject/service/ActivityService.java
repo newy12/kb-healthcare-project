@@ -16,6 +16,8 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -150,11 +152,14 @@ public class ActivityService {
                             .mapToDouble(ActivityEntry::getDistanceValue)
                             .sum();
 
+                    // Distance 값을 소수점 4자리로 반올림
+                    BigDecimal roundedDistance = new BigDecimal(totalDistance).setScale(4, RoundingMode.HALF_UP);
+
                     return new DailyActivityResponseDto(
                             activityDate.format(formatter),   // 날짜
                             totalSteps,     // 총 Steps
                             (int) totalCalories, // 총 Calories
-                            totalDistance,  // 총 Distance
+                            roundedDistance,  // 총 Distance
                             recordKey       // RecordKey
                     );
                 })
@@ -193,12 +198,15 @@ public class ActivityService {
                             .mapToDouble(ActivityEntry::getDistanceValue)
                             .sum();
 
+                    // Distance 값을 소수점 4자리로 반올림
+                    BigDecimal roundedDistance = new BigDecimal(totalDistance).setScale(4, RoundingMode.HALF_UP);
+
                     // 계산된 월별 데이터와 recordKey를 사용하여 MonthlyActivityResponseDto 객체 생성
                     return new MonthlyActivityResponseDto(
                             month.toString(),   // 날짜
                             totalSteps,     // 총 Steps
                             (int) totalCalories, // 총 Calories
-                            totalDistance,  // 총 Distance
+                            roundedDistance,  // 총 Distance
                             recordKey       // RecordKey
                     );
                 })
